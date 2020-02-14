@@ -12,7 +12,7 @@ import Feed from 'rss-to-json';
 
 export default function HomePage() {
   const [link, setLink] = useState(undefined);
-  const [rssObject, setRssObject] = useState([]);
+  const [rssObject, setRssObject] = useState([{enclosures:[{url:''}]}]);
 
   useEffect(() => {
     Feed.load(link, function(err, rss) {
@@ -32,7 +32,7 @@ export default function HomePage() {
           <tr>
       <th>{item.title}</th>
       <th>{item.desciption}</th>
-            <th><a href={item.link}>{item.link}</a></th>
+            <th>{item.enclosures.map(enclosure=><audio controls><source src={enclosure.url}/></audio>)}</th>
           </tr>
         );
       })}
