@@ -5,27 +5,37 @@
  *
  */
 
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 import messages from './messages';
 import Feed from 'rss-to-json';
 
 export default function HomePage() {
-  const [link,setLink] = useState(undefined);
-  const [rssObject,setRssObject] = useState({title:undefined,link:undefined});
+  const [link, setLink] = useState(undefined);
+  const [rssObject, setRssObject] = useState([]);
 
-  useEffect(()=>{
+  useEffect(() => {
     Feed.load(link, function(err, rss) {
-      setRssObject(rss)
-   })
-  },[link])
+      if (rss) {
+        setRssObject(rss.items);
+      }
+    });
+  }, [link]);
 
   return (
     <>
-    <h1>
-      <input onChange={(event)=>setLink(event.target.value)} ></input>
-    </h1>
-    {JSON.stringify(rssObject)}
+      <h1>
+        <input onChange={event => setLink(event.target.value)} />
+      </h1>
+      {rssObject.map((item, index) => {
+        return (
+          <tr>
+      <th>{item.title}</th>
+      <th>{item.desciption}</th>
+            <th><a href={item.link}>{item.link}</a></th>
+          </tr>
+        );
+      })}
     </>
   );
 }
