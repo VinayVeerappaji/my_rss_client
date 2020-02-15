@@ -9474,6 +9474,14 @@ ripemd160@^2.0.0, ripemd160@^2.0.1:
     hash-base "^3.0.0"
     inherits "^2.0.1"
 
+rss-parser@^3.7.5:
+  version "3.7.5"
+  resolved "https://registry.yarnpkg.com/rss-parser/-/rss-parser-3.7.5.tgz#f183148e81880f2e48166e09e9277b3c86de6de4"
+  integrity sha512-bUbAJfiuNyR/IGpYie6ro6x7X26QMWHxz1Sy9qkPyU/vYwbf3YdopQJIIELwdp3FCU4evcyetOD8bA8fgS+SqA==
+  dependencies:
+    entities "^1.1.1"
+    xml2js "^0.4.19"
+
 rss-to-json@^1.0.5:
   version "1.0.5"
   resolved "https://registry.yarnpkg.com/rss-to-json/-/rss-to-json-1.0.5.tgz#063cac4bfffe155b5287f152c051d765ec629bc3"
@@ -11433,7 +11441,7 @@ xml-parse-from-string@^1.0.0:
   resolved "https://registry.yarnpkg.com/xml-parse-from-string/-/xml-parse-from-string-1.0.1.tgz#a9029e929d3dbcded169f3c6e28238d95a5d5a28"
   integrity sha1-qQKekp09vN7RafPG4oI42VpdWig=
 
-xml2js@^0.4.22, xml2js@^0.4.5:
+xml2js@^0.4.19, xml2js@^0.4.22, xml2js@^0.4.5:
   version "0.4.23"
   resolved "https://registry.yarnpkg.com/xml2js/-/xml2js-0.4.23.tgz#a0c69516752421eb2ac758ee4d4ccf58843eac66"
   integrity sha512-ySPiMjM0+pLDftHgXY4By0uswI3SPKLDw/i3UXbnO8M/p28zqexCUoPmQFrYD+/1BzhGJSs2i1ERWKJAtiLrug==

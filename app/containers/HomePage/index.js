@@ -8,7 +8,9 @@
 import React, { useEffect, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 import messages from './messages';
-import Feed from 'rss-to-json';
+//import Feed from 'rss-to-json';
+
+import Parser from 'rss-parser';
 import {
   Table,
   TableBody,
@@ -30,6 +32,9 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
+let parser = new Parser();
+const CORS_PROXY = "https://cors-anywhere.herokuapp.com/"
+
 export default function HomePage() {
   const [link, setLink] = useState(undefined);
   const [rssObject, setRssObject] = useState([{ enclosures: [{ url: '' }] }]);
@@ -37,12 +42,22 @@ export default function HomePage() {
   const classes = useStyles();
 
   useEffect(() => {
-    Feed.load(link, function(err, rss) {
-      if (rss) {
-        setRssObject(rss.items);
-        console.log(rss)
-      }
-    });
+    // Feed.load(link, function(err, rss) {
+    //   if (rss) {
+    //     setRssObject(rss.items);
+    //     console.log(rss)
+    //   }
+    // });
+    (async () => {
+ 
+      let feed = await parser.parseURL(CORS_PROXY+link);
+      // console.log(feed.title);
+      setRssObject(feed.items)
+      // feed.items.forEach(item => {
+      //   console.log(item.title + ':' + item.link)
+      // });
+     
+    })();
   }, [link]);
 
   const [page,setPage] = useState(0);
@@ -61,6 +76,7 @@ export default function HomePage() {
       <h1>
         <input onChange={event => setLink(event.target.value)} />
       </h1>
+      {/* <Tale */}
       <TableContainer component={Paper}>
       <TablePagination
           rowsPerPageOptions={[5,10,15,20]}
@@ -75,7 +91,7 @@ export default function HomePage() {
           <TableHead>
             <TableRow>
               {Object.keys(rssObject[0]).map((item, index) => (
-            <TableCell className={classes.table}>{item}</TableCell>
+            <TableCell className={classes.table}>{JSON.stringify(item)}</TableCell>
               ))}
             </TableRow>
           </TableHead>
@@ -84,10 +100,9 @@ export default function HomePage() {
               return (
                 <TableRow >
                   {Object.keys(item).map(function(key, index) {
-                    if(key==='enclosures'){
+                    if(key==='enclosure'){
                         if(item[key]){
-                          let enclosures = item[key]
-                          let enclosure = enclosures[0]
+                          let enclosure = item[key]
                       return(
                         <Tooltip title={key}><TableCell className={classes.table}>
                           <audio controls>
@@ -105,7 +120,7 @@ export default function HomePage() {
 
                     else{
                       return(<Tooltip title={key}><TableCell className={classes.table}>{
-                        item[key]
+                        JSON.stringify(item[key])
                         }</TableCell></Tooltip>);}
                   })}
                 </TableRow>
