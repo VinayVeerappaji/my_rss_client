@@ -13,7 +13,7 @@ import Feed from 'rss-to-json';
 export default function HomePage() {
   const [link, setLink] = useState(undefined);
   const [rssObject, setRssObject] = useState([{enclosures:[{url:''}]}]);
-
+  const [id,setId] = useState(null);
   useEffect(() => {
     Feed.load(link, function(err, rss) {
       if (rss) {
@@ -32,7 +32,8 @@ export default function HomePage() {
           <tr>
       <th>{item.title}</th>
       <th>{item.desciption}</th>
-            <th>{item.enclosures.map(enclosure=><audio controls><source src={enclosure.url}/></audio>)}</th>
+      <th><button onClick={()=>{setId(index);console.log(index)}}>click to play</button></th>
+            <th>{item.enclosures.map(enclosure=>{console.log(index);return(<>{(enclosure.type==='audio/mpeg'&&id==={index})&&<audio controls><source src={enclosure.url}/></audio>}</>)})}}</th>
           </tr>
         );
       })}
