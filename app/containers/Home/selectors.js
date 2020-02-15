@@ -21,5 +21,11 @@ const makeSelectHome = () =>
     substate => substate,
   );
 
+const makeSelectRssObject = () =>
+    createSelector(
+      selectHomeDomain,
+      substate => substate.RssObject
+    )
+
 export default makeSelectHome;
-export { selectHomeDomain };
+export { selectHomeDomain,makeSelectRssObject };
