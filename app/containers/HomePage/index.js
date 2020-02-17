@@ -76,6 +76,22 @@ export default function HomePage() {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
+
+  function validateIfAudioRss(){
+    console.log(rssObject[0])
+    const url = new URL(rssObject[0].enclosure.url);
+    try{if(url.pathname.split('.').pop()==='mp3'){
+      alert(url.pathname.split('.').pop())
+      alert('audio')
+    }else{
+      alert(url.pathname.split('.').pop())
+      alert('not audio')
+    }}catch{
+      alert(url.pathname.split('.').pop())
+      alert('not audio')
+    }
+  }
+
   return (
     <>
       <TextField
@@ -85,6 +101,9 @@ export default function HomePage() {
       />
       <Button onClick={() => requestRss(link)} variant="contained">
         Request
+      </Button>
+      <Button onClick={validateIfAudioRss} variant="contained">
+        Validate if audio RSS
       </Button>
       {loading && <CircularProgress />}
       {rssObject && (
