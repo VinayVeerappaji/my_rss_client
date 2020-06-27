@@ -71,7 +71,7 @@ export default function HomePage() {
         margin: '1%',
         backgroundColor: `${backgroundColorGenerator()}`
       }}
-      id={index}
+      id={item.guid}
         className={'item'}
       >
         <img
@@ -101,7 +101,7 @@ export default function HomePage() {
   
           }}
           onClick={async ()=>{
-            var text = `https://frosty-engelbart-cda16e.netlify.app?rss=${link}&page=${page?page:0}&id=${index}`;
+            var text = `https://frosty-engelbart-cda16e.netlify.app?rss=${link}&page=${page?page:0}&id=${item.guid}`;
   navigator.clipboard.writeText(text).then(function() {
     console.log('Async: Copying to clipboard was successful!');
   }, function(err) {
