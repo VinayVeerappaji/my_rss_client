@@ -148,7 +148,10 @@ export default function HomePage() {
       try {
         setLink(link);
         setRssObject([])
-        setPage(parseInt(url.searchParams.get("page"),10) )
+        let recievedPage = parseInt(url.searchParams.get("page"),10)
+        if(recievedPage){
+          setPage(recievedPage)
+        }
         setLoading(true);
         let feed = await parser.parseURL(CORS_PROXY + link);
         setLoading(false);
@@ -156,16 +159,22 @@ export default function HomePage() {
         setRssObject(feed.items);
         SaveToLocalStorage(feed, link);
         setHistory(GetFromLocalStorage())
-        let id = url.searchParams.get("id")
-        if(id){
-        var elmnt = document.getElementById(id);
-elmnt.scrollIntoView();}
       } catch (error) {
         console.log(error);
         setLoading(false);
         alert('not a rss');
       }
     })();
+  
+    try {
+      let id = url.searchParams.get("id")
+      if(id){
+      var elmnt = document.getElementById(id);
+elmnt.scrollIntoView();}
+    } catch (error) {
+      
+    }
+  
   };
 
   const [page, setPage] = useState(0);
