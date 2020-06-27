@@ -105,8 +105,9 @@ export default function HomePage() {
           whiteSpace: 'nowrap',
           backgroundColor: 'transparent'
         }}
+          disabled={audioSrc===item.enclosure.url}
           onClick={()=>setAudioSrc(item.enclosure.url)}>
-            PLAY ▶
+           {audioSrc===item.enclosure.url?'PLAYING':'PLAY ▶'}
           </button>
           <button
         style={{
@@ -121,6 +122,7 @@ export default function HomePage() {
             var text = `https://frosty-engelbart-cda16e.netlify.app?rss=${link}&page=${page?page:0}&id=${item.guid}`;
   navigator.clipboard.writeText(text).then(function() {
     console.log('Async: Copying to clipboard was successful!');
+    alert('Sharing link copied to clipboard')
   }, function(err) {
     console.error('Async: Could not copy text: ', err);
   });
@@ -171,7 +173,7 @@ export default function HomePage() {
       } catch (error) {
         console.log(error);
         setLoading(false);
-        alert('not a rss');
+        alert('Not a valid podcast / Network issues');
       }
     
     
