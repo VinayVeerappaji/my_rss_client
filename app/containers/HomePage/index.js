@@ -43,46 +43,7 @@ const ClearLocalStorage = () => {
   window.localStorage.removeItem('history');
 }
 
-const element = item => {
-  return (
-    <div style={{
-      display: 'flex',
-      flexDirection: 'row',
-      border: '2.5px solid black',
-      margin: '1%',
-      backgroundColor: `${backgroundColorGenerator()}`
-    }}
-      className={'item'}
-    >
-      <img
-        style={{
-          border: '2.5px solid black',
-          margin: '1%'
-        }}
-        src={item.itunes.image} width={100} height={100} />
-      <div style={{
-        display: 'flex',
-        flexDirection: 'column',
-      }}>
-        <h2 style={{
-          fontFamily: "'Lobster', cursive"
-        }}>{item.title}
-                </h2>
-        <audio controls
-          style={{
-            border: '5px solid black',
-            borderRadius: '500px'
-          }}
-        >
-          <source src={item.enclosure.url} />
-        </audio>
-        <p style={{
-          fontFamily: "'Montserrat', sans-serif"
-        }}>{item.itunes.subtitle}</p>
-      </div>
-    </div>
-  )
-}
+
 
 const backgroundColorGenerator = () => {
 
@@ -101,26 +62,93 @@ const backgroundColorGenerator = () => {
 }
 export default function HomePage() {
 
+  const element = (item,index) => {
+    return (
+      <div style={{
+        display: 'flex',
+        flexDirection: 'row',
+        border: '2.5px solid black',
+        margin: '1%',
+        backgroundColor: `${backgroundColorGenerator()}`
+      }}
+      id={index}
+        className={'item'}
+      >
+        <img
+          style={{
+            border: '2.5px solid black',
+            margin: '1%'
+          }}
+          src={item.itunes.image} width={100} height={100} />
+        <div style={{
+          display: 'flex',
+          flexDirection: 'column',
+        }}>
+          <h2 
+          style={{
+            fontFamily: "'Lobster', cursive"
+          }}>{item.title}
+           <span 
+          style={{
+            marginLeft:"10px",
+            cursor: 'pointer',
+            backgroundColor:'transparent',
+            fontSize : '10px',
+            border: '2px solid black',
+            padding: '2px',
+            width:'fit-content',
+            fontFamily: "'Montserrat', sans-serif"
+  
+          }}
+          onClick={async ()=>{
+            var text = `https://frosty-engelbart-cda16e.netlify.app?rss=${link}&page=${page?page:0}&id=${index}`;
+  navigator.clipboard.writeText(text).then(function() {
+    console.log('Async: Copying to clipboard was successful!');
+  }, function(err) {
+    console.error('Async: Could not copy text: ', err);
+  });
+          }}>
+            SHARE
+          </span>
+                  </h2>
+                 
+          <audio controls
+            style={{
+              border: '5px solid black',
+              borderRadius: '500px'
+            }}
+          >
+            <source src={item.enclosure.url} />
+          </audio>
+          <p style={{
+            fontFamily: "'Montserrat', sans-serif"
+          }}>{item.itunes.subtitle}</p>
+        </div>
+      </div>
+    )
+  }
 
+  let url = new URL(window.location.href);
   const [link, setLink] = useState(undefined);
   const [rssObject, setRssObject] = useState([]);
   const [loading, setLoading] = useState(false);
   const [history, setHistory] = useState(GetFromLocalStorage())
   useEffect(
     () => {
-      let url = new URL(window.location.href);
       let rssQueryParameter = url.searchParams.get("rss");
       setLink(rssQueryParameter);
       if (rssQueryParameter)
         requestRss(rssQueryParameter);
     }, []);
 
+  
   const requestRss = link => {
 
     (async () => {
       try {
+        setLink(link);
         setRssObject([])
-        setPage(0)
+        setPage(parseInt(url.searchParams.get("page"),10) )
         setLoading(true);
         let feed = await parser.parseURL(CORS_PROXY + link);
         setLoading(false);
@@ -128,6 +156,10 @@ export default function HomePage() {
         setRssObject(feed.items);
         SaveToLocalStorage(feed, link);
         setHistory(GetFromLocalStorage())
+        let id = url.searchParams.get("id")
+        if(id){
+        var elmnt = document.getElementById(id);
+elmnt.scrollIntoView();}
       } catch (error) {
         console.log(error);
         setLoading(false);
@@ -156,7 +188,8 @@ export default function HomePage() {
           whiteSpace: 'nowrap',
           backgroundColor: 'transparent'
         }}
-        onClick={() => page > 0 ? setPage(page - 1) : alert('no more items')}>
+        disabled={page == 0}
+        onClick={() =>  setPage(page - 1)}>
         BACK
 </button>
       <span
@@ -167,7 +200,8 @@ export default function HomePage() {
           whiteSpace: 'nowrap',
         }}
       >
-        Page : {page}
+        {console.log(page)}
+        {(page*10)+1} - {(((page+1)*10)>rssObject.length)?rssObject.length:(page+1)*10} of {rssObject.length}
       </span>
 
       < button
@@ -179,7 +213,8 @@ export default function HomePage() {
           whiteSpace: 'nowrap',
           backgroundColor: 'transparent'
         }}
-        onClick={() => page * rowsPerPage < rssObject.length ? setPage(page + 1) : alert('No more items')}>
+        disabled={(page+1) * rowsPerPage > rssObject.length}
+        onClick={() => setPage(page + 1)}>
         NEXT
 </button>
     </div>
@@ -197,15 +232,17 @@ export default function HomePage() {
           margin: 'auto'
         }}>
           <label>
-            {loading ? `Loading..` : `Enter RSS here.`}
+            {loading ? `Loading..` : `Podcast Client`}
           </label>
           <input
             onChange={event => setLink(event.target.value)}
             defaultValue={link}
             disabled={loading}
+            placeholder={'Enter RSS link here'}
+            
           />
-          <button onClick={() => requestRss(link)} className={'request'} disabled={loading}>
-            ~ Request ~
+          <button onClick={() => requestRss(link)} className={'request'} disabled={loading||!link}>
+            Load Podcast
       </button>
 
         </span>
@@ -213,28 +250,55 @@ export default function HomePage() {
           >
             <h3 style={{
           fontFamily: "'Lobster', cursive"
-        }}>History
-        <span 
+        }}>PodList
+        <button 
         style={{
           marginLeft:"10px",
-          cursor: 'pointer'
+          cursor: 'pointer',
+          backgroundColor:'transparent',
+          border :`none`,
+          fontSize : '15px'
         }}
         onClick={()=>{
           ClearLocalStorage()
           setHistory(undefined)
         }}>
           ❌
-        </span>
+        </button>
 
         </h3>
-            {history.map(item => <li onClick={() => requestRss(item.link)}>{item.title}</li>)}</ul>}
+            {history.map(item => <span
+            style={{
+              display: 'flex',
+              flexDirection: 'row',
+              alignItems: 'center'
+            }}
+            ><li onClick={() => requestRss(item.link)}>{item.title}</li>        <span 
+        style={{
+          marginLeft:"10px",
+          cursor: 'pointer',
+          backgroundColor:'transparent',
+          fontSize : '10px',
+          border: '2px solid black',
+          padding: '2px'
+        }}
+        onClick={async ()=>{
+          var text = `https://frosty-engelbart-cda16e.netlify.app?rss=${item.link}&page=${0}`;
+navigator.clipboard.writeText(text).then(function() {
+  console.log('Async: Copying to clipboard was successful!');
+}, function(err) {
+  console.error('Async: Could not copy text: ', err);
+});
+        }}>
+          SHARE
+        </span></span>)}</ul>}
         {rssObject.length > 0 && <PaginationControls />}
         {rssObject && (
           rssObject
             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
             .map((item, index) => {
               return (
-                element(item)
+                element(item,index)
               );
             })
         )}
