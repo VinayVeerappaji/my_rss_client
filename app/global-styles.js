@@ -44,7 +44,7 @@ const GlobalStyle = createGlobalStyle`
     padding-bottom : 10px;
     border: 5px solid black;
     border-radius: 0;
-    background-color: transparent;
+    background-color: #fff;
     font-family: 'Montserrat', sans-serif;
     width: 90%;
     margin: auto;
