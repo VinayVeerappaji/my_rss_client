@@ -276,31 +276,7 @@ elmnt.scrollIntoView();}
         </button>
 
         </h3>
-            {history.map(item => <span
-            style={{
-              display: 'flex',
-              flexDirection: 'row',
-              alignItems: 'center'
-            }}
-            ><li onClick={() => requestRss(item.link)}>{item.title}</li>        <span 
-        style={{
-          marginLeft:"10px",
-          cursor: 'pointer',
-          backgroundColor:'transparent',
-          fontSize : '10px',
-          border: '2px solid black',
-          padding: '2px'
-        }}
-        onClick={async ()=>{
-          var text = `https://frosty-engelbart-cda16e.netlify.app?rss=${item.link}&page=${0}`;
-navigator.clipboard.writeText(text).then(function() {
-  console.log('Async: Copying to clipboard was successful!');
-}, function(err) {
-  console.error('Async: Could not copy text: ', err);
-});
-        }}>
-          SHARE
-        </span></span>)}</ul>}
+            {history.map(item => <li onClick={() => requestRss(item.link)}>{item.title}</li>)}</ul>}
         {rssObject.length > 0 && <PaginationControls />}
         {rssObject && (
           rssObject
