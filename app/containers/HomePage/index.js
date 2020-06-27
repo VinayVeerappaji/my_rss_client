@@ -39,12 +39,65 @@ const useStyles = makeStyles(theme => ({
 let parser = new Parser({
   headers: {'User-Agent': 'Spotify'},
 });
-//const CORS_PROXY = 'https://cors-anywhere.herokuapp.com/';
-const CORS_PROXY = null;
+const CORS_PROXY = 'https://cors-anywhere.herokuapp.com/';
+//const CORS_PROXY = null;
 
+const element = item => {
+  return (
+    <div style={{
+      display:'flex',
+      flexDirection:'row',
+      border: '2.5px solid black',
+      margin: '1%',
+      backgroundColor: `${backgroundColorGenerator()}`
+    }}>
+      <img 
+      style={{border: '2.5px solid black',
+    margin: '1%'
+    }}
+      src={item.itunes.image} width={100} height={100}/>
+      <div style={{
+      display:'flex',
+      flexDirection:'column',
+      //border: '2.5px solid black'
+    }}>
+      <h2 style={{
+          fontFamily: "'Lobster', cursive"
+    }}>{item.title}</h2>
+          <audio controls
+          style={{
+            border: '5px solid black',
+    borderRadius: '500px'
+          }}
+          >
+        <source src={item.enclosure.url} />
+      </audio>
+      <p style={{
+          fontFamily: "'Montserrat', sans-serif"
+    }}>{item.itunes.subtitle}</p>
+      </div>
+    </div>
+  )
+}
+
+const backgroundColorGenerator = () => {
+  
+switch(Math.floor((Math.random() * 10) + 1)){
+  case 1 : return '#a4c9d8';
+  case 2 : return '#ffe818';
+  case 3: return '#fff';
+  case 4: return '#cdf567';
+  case 5 : return '#ff4935';
+  case 6 : return '#3e8ef1';
+  case 7 : return '#ffbc4b';
+  case 8 : return '#a4c9d8';
+  case 9 : return '#ffe818';
+  case 10: return '#fff';
+}
+}
 export default function HomePage() {
   const [link, setLink] = useState(undefined);
-  const [rssObject, setRssObject] = useState(undefined);
+  const [rssObject, setRssObject] = useState([]);
   const [loading, setLoading] = useState(false);
   const [id, setId] = useState(null);
   const classes = useStyles();
@@ -58,7 +111,7 @@ export default function HomePage() {
     (async () => {
       try {
         setLoading(true);
-        let feed = await parser.parseURL(link);
+        let feed = await parser.parseURL(CORS_PROXY+link);
         setLoading(false);
         console.log(feed);
         setRssObject(feed.items);
@@ -73,145 +126,89 @@ export default function HomePage() {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
-  const handleChangePage = (event, page) => {
-    setPage(page);
-  };
+  const PaginationControls = ()=><>
+  <div style={{
+      display:'flex',
+      flexDirection:'row',
+      margin: 'auto'
+    }}>
+<button 
+style={{
+  border: '2.5px solid black',
+  fontFamily: "'Montserrat', sans-serif",
+  fontWeight:'bold',
+  margin:'5%',
+  whiteSpace:'nowrap',
+  backgroundColor:'transparent'
+}}
+onClick={()=>page>0?setPage(page-1):alert('no more items')}>
+  BACK
+</button>
+<span 
+style={{
+  fontFamily: "'Lobster', cursive",
+  fontWeight:'bold',
+  margin:'5%',
+  whiteSpace:'nowrap',
+}}
+>
+  Page : {page}
+</span>
 
-  const handleChangeRowsPerPage = event => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
-  };
-
+< button
+style={{
+  border: '2.5px solid black',
+  fontFamily: "'Montserrat', sans-serif",
+  fontWeight:'bold',
+  margin:'5%',
+  whiteSpace:'nowrap',
+  backgroundColor:'transparent'
+}}
+onClick={()=>page*rowsPerPage<rssObject.length?setPage(page+1):alert('No more items')}>
+  NEXT
+</button>
+  </div>
+  </>
   return (
     <>
-      <TextField
-        label="Enter RSS link here"
-        variant="outlined"
+    <div style={{
+      height:'100vh',
+      maxWidth:'700px',
+      margin:'auto',
+    }}>
+      <span style={{
+        display:'flex',
+        flexDirection:'column',
+        maxWidth:'700px',
+        margin:'auto'
+      }}>
+      <label>
+      Enter RSS here.
+      </label>
+          <input
         onChange={event => setLink(event.target.value)}
-      />
-      <Button onClick={() => requestRss(link)} variant="contained">
-        Request
-      </Button>
+   />
+           <button onClick={() => requestRss(link)} className={'request'}>
+       ~ Request ~
+      </button>
+      {rssObject.length>0 &&<PaginationControls/>}
+        </span>
+        {rssObject && (
+rssObject
+  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+  .map((item, index) => {
+    return (
+      element(item)
+    );
+  })
+)}
+
+    </div>
+
+   
+
       {loading && <CircularProgress />}
-      {rssObject && (
-        <TableContainer component={Paper}>
-          <TablePagination
-            rowsPerPageOptions={[5, 10, 15, 20]}
-            component="div"
-            count={rssObject.length}
-            rowsPerPage={rowsPerPage}
-            page={page}
-            onChangePage={handleChangePage}
-            onChangeRowsPerPage={handleChangeRowsPerPage}
-          />
-          <Table
-            size="small"
-            aria-label="simple table"
-            stickyHeader={true}
-            style={{ overflowX: 'auto' }}
-          >
-            <TableBody>
-              {rssObject
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((item, index) => {
-                  return (
-                    <TableRow>
-                      {Object.keys(item).map(function(key, index) {
-                        if (key === 'enclosure') {
-                          if (item[key]) {
-                            let enclosure = item[key];
-                            return (
-                              <Tooltip title={key}>
-                                <TableCell className={classes.table}>
-                                  <audio controls>
-                                    <source src={enclosure.url} />
-                                  </audio>
-                                  <Chip label={enclosure.length} />
-                                  <Chip label={enclosure.type} />
-                                </TableCell>
-                              </Tooltip>
-                            );
-                          }
-                        } else if (key === 'guid') {
-                          return (
-                            <Tooltip title={key}>
-                              <TableCell className={classes.table}>
-                                {JSON.stringify(item[key])}
-                              </TableCell>
-                            </Tooltip>
-                          );
-                        } else if (key === 'content:encoded') {
-                          var el = document.createElement('html');
-                          el.innerHTML = item[key];
-                          return (
-                            <Tooltip title={key}>
-                              <TableCell className={classes.table}>
-                                {el.innerText}
-                              </TableCell>
-                            </Tooltip>
-                          );
-                        } else if (key === 'link') {
-                          console.log('link');
-                          return (
-                            <Tooltip title={key}>
-                              <TableCell className={classes.table}>
-                                <a src={item[key]}>{item[key]}</a>
-                              </TableCell>
-                            </Tooltip>
-                          );
-                        } else if (key === 'itunes') {
-                          console.log('link');
-                          return (
-                            <>
-                              <Tooltip title={key}>
-                                <TableCell className={classes.table}>
-                                  {item[key].author}
-                                </TableCell>
-                              </Tooltip>
-                              <Tooltip title={key}>
-                                <TableCell className={classes.table}>
-                                  {item[key].summary}
-                                </TableCell>
-                              </Tooltip>
-                              <Tooltip title={key}>
-                                <TableCell className={classes.table}>
-                                  {item[key].explicit}
-                                </TableCell>
-                              </Tooltip>
-                              <Tooltip title={key}>
-                                <TableCell className={classes.table}>
-                                  {item[key].duration}
-                                </TableCell>
-                              </Tooltip>
-                              <Tooltip title={key}>
-                                <TableCell className={classes.table}>
-                                  <img src={item[key].image} height={'100'} />
-                                </TableCell>
-                              </Tooltip>
-                              <Tooltip title={key}>
-                                <TableCell className={classes.table}>
-                                  {item[key].episode}
-                                </TableCell>
-                              </Tooltip>
-                            </>
-                          );
-                        } else {
-                          return (
-                            <Tooltip title={key}>
-                              <TableCell className={classes.table}>
-                                {JSON.stringify(item[key])}
-                              </TableCell>
-                            </Tooltip>
-                          );
-                        }
-                      })}
-                    </TableRow>
-                  );
-                })}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      )}
+
     </>
   );
 }
