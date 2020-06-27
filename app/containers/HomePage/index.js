@@ -7,6 +7,8 @@
 
 import React, { useEffect, useState } from 'react';
 import Parser from 'rss-parser';
+import AudioPlayer from 'react-h5-audio-player';
+import './playstyle.css';
 
 let parser = new Parser({
   headers: { 'User-Agent': 'Spotify' },
@@ -88,18 +90,33 @@ export default function HomePage() {
           style={{
             fontFamily: "'Lobster', cursive"
           }}>{item.title}
-           <span 
-          style={{
-            marginLeft:"10px",
-            cursor: 'pointer',
-            backgroundColor:'transparent',
-            fontSize : '10px',
-            border: '2px solid black',
-            padding: '2px',
-            width:'fit-content',
-            fontFamily: "'Montserrat', sans-serif"
-  
-          }}
+
+                  </h2>
+                 <div style={{
+          display: 'flex',
+          flexDirection: 'row',
+        }}>
+                  <button 
+        style={{
+          border: '2.5px solid black',
+          fontFamily: "'Montserrat', sans-serif",
+          fontWeight: 'bold',
+          marginLeft: '5px',
+          whiteSpace: 'nowrap',
+          backgroundColor: 'transparent'
+        }}
+          onClick={()=>setAudioSrc(item.enclosure.url)}>
+            PLAY ▶
+          </button>
+          <button
+        style={{
+          border: '2.5px solid black',
+          fontFamily: "'Montserrat', sans-serif",
+          fontWeight: 'bold',
+          marginLeft: '5px',
+          whiteSpace: 'nowrap',
+          backgroundColor: 'transparent'
+        }}
           onClick={async ()=>{
             var text = `https://frosty-engelbart-cda16e.netlify.app?rss=${link}&page=${page?page:0}&id=${item.guid}`;
   navigator.clipboard.writeText(text).then(function() {
@@ -109,17 +126,8 @@ export default function HomePage() {
   });
           }}>
             SHARE
-          </span>
-                  </h2>
-                 
-          <audio controls
-            style={{
-              border: '5px solid black',
-              borderRadius: '500px'
-            }}
-          >
-            <source src={item.enclosure.url} />
-          </audio>
+          </button>
+          </div>
           <p style={{
             fontFamily: "'Montserrat', sans-serif"
           }}>{item.itunes.subtitle}</p>
@@ -159,6 +167,7 @@ export default function HomePage() {
         setRssObject(feed.items);
         SaveToLocalStorage(feed, link);
         setHistory(GetFromLocalStorage())
+        setAudioSrc(feed.items[0].enclosure.url);
       } catch (error) {
         console.log(error);
         setLoading(false);
@@ -182,7 +191,7 @@ elmnt.scrollIntoView();}
 
   const [page, setPage] = useState(0);
   const rowsPerPage = 10;
-
+  const [audioSrc,setAudioSrc] = useState('');
   const PaginationControls = () => <>
     <div style={{
       display: 'flex',
@@ -196,7 +205,7 @@ elmnt.scrollIntoView();}
           border: '2.5px solid black',
           fontFamily: "'Montserrat', sans-serif",
           fontWeight: 'bold',
-          margin: '5%',
+          margin: '3%',
           whiteSpace: 'nowrap',
           backgroundColor: 'transparent'
         }}
@@ -208,7 +217,7 @@ elmnt.scrollIntoView();}
         style={{
           fontFamily: "'Lobster', cursive",
           fontWeight: 'bold',
-          margin: '5%',
+          margin: '3%',
           whiteSpace: 'nowrap',
         }}
       >
@@ -221,7 +230,7 @@ elmnt.scrollIntoView();}
           border: '2.5px solid black',
           fontFamily: "'Montserrat', sans-serif",
           fontWeight: 'bold',
-          margin: '5%',
+          margin: '3%',
           whiteSpace: 'nowrap',
           backgroundColor: 'transparent'
         }}
@@ -279,8 +288,9 @@ elmnt.scrollIntoView();}
         </button>
 
         </h3>
-            {history.map(item => <li onClick={() => requestRss(item.link)}>{item.title}</li>)}</ul>}
+            {history.map(item => <li onClick={() =>{ requestRss(item.link)}}>{item.title}</li>)}</ul>}
         {rssObject.length > 0 && <PaginationControls />}
+        <div style={{marginBottom:'100px'}}>
         {rssObject && (
           rssObject
             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
@@ -290,7 +300,19 @@ elmnt.scrollIntoView();}
               );
             })
         )}
-
+        </div>
+  <AudioPlayer
+    style={{
+      position: 'fixed',
+    bottom: '0',
+    margin: 'auto',
+    maxWidth: '700px'
+    }}
+    autoPlay
+    src={audioSrc}
+    onPlay={e => console.log("onPlay")}
+    // other props here
+  />
       </div>
 
 

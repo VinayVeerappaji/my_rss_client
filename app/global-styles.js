@@ -80,6 +80,10 @@ const GlobalStyle = createGlobalStyle`
       }
   }
 
+  .rhap_container {
+    background-color: #CFF06A;
+    border: 5px solid black;
+  }
 `;
 
 export default GlobalStyle;
