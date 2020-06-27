@@ -164,8 +164,8 @@ export default function HomePage() {
         setLoading(false);
         alert('not a rss');
       }
-    })();
-  
+    
+    
     try {
       let id = url.searchParams.get("id")
       if(id){
@@ -174,7 +174,10 @@ elmnt.scrollIntoView();}
     } catch (error) {
       
     }
+    }
+    )();
   
+
   };
 
   const [page, setPage] = useState(0);
