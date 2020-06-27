@@ -293,7 +293,7 @@ elmnt.scrollIntoView();}
         </button>
 
         </h3>
-            {history.map(item => <li onClick={() =>{ requestRss(item.link)}}>{item.title}</li>)}</ul>}
+            {history.map(item => <li><a href={`https://frosty-engelbart-cda16e.netlify.app?rss=${item.link}&page=${0}`}>{item.title}</a></li>)}</ul>}
         {rssObject.length > 0 && <PaginationControls />}
         <div style={{marginBottom:'100px'}}>
         {rssObject && (

@@ -52,10 +52,13 @@ const GlobalStyle = createGlobalStyle`
   }
 
   li {
-    &:hover{
-      text-decoration-line: underline;    
+    a {
+      color: black;
+      text-decoration-line: none;
+      &:hover{
+        text-decoration-line: underline;    
+      }
     }
-    cursor: pointer;
   }
 
   .request {
