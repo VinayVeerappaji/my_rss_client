@@ -6,41 +6,13 @@
  */
 
 import React, { useEffect, useState } from 'react';
-import { FormattedMessage } from 'react-intl';
-import messages from './messages';
-//import Feed from 'rss-to-json';
-
 import Parser from 'rss-parser';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
-  Grid,
-  Tooltip,
-  Chip,
-  TablePagination,
-  TextField,
-  Button,
-  CircularProgress,
-} from '@material-ui/core';
-import { makeStyles } from '@material-ui/styles';
-import browserFingerprint from './browserFinerprint';
-const useStyles = makeStyles(theme => ({
-  table: {
-    //wordWrap: 'break-word',
-    whiteSpace: 'nowrap',
-  },
-}));
 
 let parser = new Parser({
   headers: {'User-Agent': 'Spotify'},
 });
+
 const CORS_PROXY = 'https://cors-anywhere.herokuapp.com/';
-//const CORS_PROXY = null;
 
 const element = item => {
   return (
@@ -50,7 +22,9 @@ const element = item => {
       border: '2.5px solid black',
       margin: '1%',
       backgroundColor: `${backgroundColorGenerator()}`
-    }}>
+    }}
+    className={'item'}
+    >
       <img 
       style={{border: '2.5px solid black',
     margin: '1%'
@@ -59,7 +33,6 @@ const element = item => {
       <div style={{
       display:'flex',
       flexDirection:'column',
-      //border: '2.5px solid black'
     }}>
       <h2 style={{
           fontFamily: "'Lobster', cursive"
@@ -96,18 +69,23 @@ switch(Math.floor((Math.random() * 10) + 1)){
 }
 }
 export default function HomePage() {
+
+
   const [link, setLink] = useState(undefined);
   const [rssObject, setRssObject] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [id, setId] = useState(null);
-  const classes = useStyles();
+
+  useEffect(
+    () => {
+     let url = new URL(window.location.href);
+     let rssQueryParameter = url.searchParams.get("rss");
+     setLink(rssQueryParameter);
+     if(rssQueryParameter)
+     requestRss(rssQueryParameter);      
+    }, []);
+  
   const requestRss = link => {
-    // Feed.load(link, function(err, rss) {
-    //   if (rss) {
-    //     setRssObject(rss.items);
-    //     console.log(rss)
-    //   }
-    // });
+
     (async () => {
       try {
         setLoading(true);
@@ -124,13 +102,15 @@ export default function HomePage() {
   };
 
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const rowsPerPage = 10;
 
   const PaginationControls = ()=><>
   <div style={{
-      display:'flex',
-      flexDirection:'row',
-      margin: 'auto'
+        display:'flex',
+        flexDirection:'row',
+        maxWidth:'700px',
+        margin:'auto',
+        justifyContent:'center'
     }}>
 <button 
 style={{
@@ -172,7 +152,6 @@ onClick={()=>page*rowsPerPage<rssObject.length?setPage(page+1):alert('No more it
   return (
     <>
     <div style={{
-      height:'100vh',
       maxWidth:'700px',
       margin:'auto',
     }}>
@@ -183,16 +162,18 @@ onClick={()=>page*rowsPerPage<rssObject.length?setPage(page+1):alert('No more it
         margin:'auto'
       }}>
       <label>
-      Enter RSS here.
+      {loading?`Loading..`:`Enter RSS here.`}
       </label>
           <input
         onChange={event => setLink(event.target.value)}
+        defaultValue={link}
+        disabled={loading}
    />
-           <button onClick={() => requestRss(link)} className={'request'}>
+           <button onClick={() => requestRss(link)} className={'request'} disabled={loading}>
        ~ Request ~
       </button>
-      {rssObject.length>0 &&<PaginationControls/>}
         </span>
+        {rssObject.length>0 &&<PaginationControls/>}
         {rssObject && (
 rssObject
   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
@@ -207,7 +188,6 @@ rssObject
 
    
 
-      {loading && <CircularProgress />}
 
     </>
   );

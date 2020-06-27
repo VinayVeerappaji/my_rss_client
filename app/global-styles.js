@@ -26,6 +26,7 @@ const GlobalStyle = createGlobalStyle`
     font-family: 'Lobster', cursive;
     line-height: 4rem;
     font-size: 2rem;
+    margin: auto;
   }
 
   input {
@@ -35,6 +36,8 @@ const GlobalStyle = createGlobalStyle`
     background-color: transparent;
     font-family: 'Montserrat', sans-serif;
     font-size: 1.5rem;
+    width: 90%;
+    margin: auto;
   }
 
   .request {
@@ -45,11 +48,19 @@ const GlobalStyle = createGlobalStyle`
     background-color: #CFF06A;
     font-size: 1.5rem;
     border-radius: 500px;
-    min-width: 500px;
+    width: 90%;
     margin: auto;
     margin-top: 10px;
   }
 
+  .item {
+    @media only screen and (max-width: 450px) {
+      flex-wrap: wrap;
+      justify-content:center;
+      div {
+        margin: 1%;
+      }
+  }
 
 `;
 
