@@ -1,3 +1,9 @@
+## How to install?
+
+[click here](https://frosty-engelbart-cda16e.netlify.app)
+
+Then add as a PWA (Progressive Web App)
+
 ## How to run the project?
 
 First, clone the repository by typing the below into the terminal:
