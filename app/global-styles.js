@@ -40,6 +40,24 @@ const GlobalStyle = createGlobalStyle`
     margin: auto;
   }
 
+  ul {
+    padding-bottom : 10px;
+    border: 5px solid black;
+    border-radius: 0;
+    background-color: transparent;
+    font-family: 'Montserrat', sans-serif;
+    width: 90%;
+    margin: auto;
+    margin-top: 10px;
+  }
+
+  li {
+    &:hover{
+      text-decoration-line: underline;    
+    }
+    cursor: pointer;
+  }
+
   .request {
     padding: 10px;
     border: 5px solid black;
