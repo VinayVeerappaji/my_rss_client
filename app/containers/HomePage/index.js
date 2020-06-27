@@ -151,7 +151,7 @@ export default function HomePage() {
 
   
   const requestRss = link => {
-
+    let feed
     (async () => {
       try {
         setLink(link);
@@ -161,7 +161,7 @@ export default function HomePage() {
           setPage(recievedPage)
         }
         setLoading(true);
-        let feed = await parser.parseURL(CORS_PROXY + link);
+        feed = await parser.parseURL(CORS_PROXY + link);
         setLoading(false);
         console.log(feed);
         setRssObject(feed.items);
@@ -179,6 +179,11 @@ export default function HomePage() {
       let id = url.searchParams.get("id")
       if(id){
       var elmnt = document.getElementById(id);
+        feed.items.map(item=>{
+          if(item.guid==id){
+            setAudioSrc(item.enclosure.url);
+          }
+        })
 elmnt.scrollIntoView();}
     } catch (error) {
       
