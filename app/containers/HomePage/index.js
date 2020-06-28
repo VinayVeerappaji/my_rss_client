@@ -140,7 +140,21 @@ export default function HomePage() {
       let rssQueryParameter = url.searchParams.get("rss");
       if (rssQueryParameter)
         requestRss(rssQueryParameter);
-    }, []);
+
+    try {
+      let allrssQueryParameter = url.searchParams.get("allrss");
+      if (allrssQueryParameter){
+        let decoded = decodeURIComponent(allrssQueryParameter);
+        let parsed = JSON.parse(decoded)
+        parsed.map((item)=>SaveToLocalStorage(item.title, item.link))
+        setHistory(parsed)
+      }
+    } catch (error) {
+      console.log(error)
+    }
+    }
+    
+    , []);
 
   const requestRss = link => {
     let feed
@@ -156,7 +170,7 @@ export default function HomePage() {
         feed = await parser.parseURL(CORS_PROXY + link);
         setLoading(false);
         setRssObject(feed.items);
-        SaveToLocalStorage(feed, link);
+        SaveToLocalStorage(feed.title, link);
         setHistory(GetFromLocalStorage())
         //setAudioSrc(feed.items[0].enclosure.url);
         setAudioInformation(feed.items[0]);
@@ -196,6 +210,16 @@ const clearHistory = () => {
   setHistory(undefined)
 }
 
+const generateAllLink = () => {
+  let history = GetFromLocalStorage();
+  if(history){
+    let stringifiedHistory = JSON.stringify(history);
+    let encoded = encodeURIComponent(stringifiedHistory);
+    let sharelink = `${url.host}?allrss=${encoded}`;
+    CopyToClipboard(sharelink);
+  }
+};
+
 const History =  () => {
 return(
   <HistorySection>
@@ -206,6 +230,11 @@ return(
           onClick={clearHistory}
         >
           ❌
+        </IconButton>
+        <IconButton
+          onClick={generateAllLink}
+        >
+          SHARE
         </IconButton>
       </H2>
       {history.map( (item,index) =>
@@ -255,6 +284,7 @@ const Heading = () => {
       <AudioPlayerWrapper
       >
         <AudioPlayer
+          autoPlay
           src={audioSrc} 
           />
       </AudioPlayerWrapper>

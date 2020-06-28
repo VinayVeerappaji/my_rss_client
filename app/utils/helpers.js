@@ -1,5 +1,4 @@
-export const SaveToLocalStorage = (feed, link) => {
-    let title = feed.title;
+export const SaveToLocalStorage = (title, link) => {
     let historyFromLocal = localStorage.getItem("history");
     let existingHistory
     if (historyFromLocal) {
