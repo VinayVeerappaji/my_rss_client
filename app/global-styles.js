@@ -21,71 +21,14 @@ const GlobalStyle = createGlobalStyle`
     min-width: 100%;
   }
 
-  
-  label {
+  h1, h2, h3, h4, h5, h6 {
     font-family: 'Lobster', cursive;
-    line-height: 4rem;
-    font-size: 2rem;
-    margin: auto;
+    font-weight: initial;
+}
   }
 
-  input {
-    padding: 10px;
-    border: 5px solid black;
-    border-radius: 0;
-    background-color: transparent;
+  p, li, span {
     font-family: 'Montserrat', sans-serif;
-    font-size: 1.5rem;
-    width: 90%;
-    margin: auto;
-  }
-
-  ul {
-    padding-bottom : 10px;
-    border: 5px solid black;
-    border-radius: 0;
-    background-color: #fff;
-    font-family: 'Montserrat', sans-serif;
-    width: 90%;
-    margin: auto;
-    margin-top: 10px;
-  }
-
-  li {
-    a {
-      color: black;
-      text-decoration-line: none;
-      &:hover{
-        text-decoration-line: underline;    
-      }
-    }
-  }
-
-  .request {
-    padding: 10px;
-    border: 5px solid black;
-    border-radius: 0;
-    font-family: 'Lobster', cursive;
-    background-color: #CFF06A;
-    font-size: 1.5rem;
-    border-radius: 500px;
-    width: 90%;
-    margin: auto;
-    margin-top: 10px;
-  }
-
-  .item {
-    @media only screen and (max-width: 450px) {
-      flex-wrap: wrap;
-      justify-content:center;
-      div {
-        margin: 1%;
-      }
-  }
-
-  .rhap_container {
-    background-color: #CFF06A;
-    border: 5px solid black;
   }
 `;
 
