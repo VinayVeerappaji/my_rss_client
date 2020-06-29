@@ -95,7 +95,7 @@ background-color: transparent;
 font-family: ${fontFamilyTwo};
 font-size: 1.5rem;
 `
-export const MainForm = styled.form`
+export const MainForm = styled.div`
 width: 90%;
 display: flex;
 flex-direction: column;
@@ -110,6 +110,7 @@ font-family: ${fontFamilyOne};
 background-color: #CFF06A;
 font-size: 1.5rem;
 border-radius: 500px;
+width: 100%;
 `
 export const HistorySection = styled.section`
 border: ${darkBorder};

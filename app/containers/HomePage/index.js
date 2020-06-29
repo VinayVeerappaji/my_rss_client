@@ -37,6 +37,7 @@ import {
   AudioPlayerWrapper,
   Padding
 } from '../../components';
+import axios from 'axios';
 
 let parser = new Parser({
   headers: { 'User-Agent': 'Spotify' },
@@ -74,6 +75,8 @@ export default function HomePage() {
   const [page, setPage] = useState(0);
   const rowsPerPage = 10;
   const [audioSrc, setAudioSrc] = useState('');
+  const [email, setEmail] = useState('');
+
   const Element = ({ item, index }) => {
     const guid = item.guid;
     const thumbnailSRC = item.itunes.image;
@@ -220,6 +223,33 @@ const generateAllLink = () => {
   }
 };
 
+const getDetails = async () => {
+  setLoading(true);
+  const message = {
+    method : `GET`,
+    url : `https://om4psrsg18.execute-api.ap-south-1.amazonaws.com/Prod/user?email=${email}`
+  };
+  const response = await axios(message)
+  if(typeof response.data === "object"){
+    if(response.data.length>0){
+      setHistory(response.data)
+      response.data.map((item)=>SaveToLocalStorage(item.title, item.link))
+    }
+  }
+  setLoading(false);
+}
+
+const sendDetails = async () => {
+  setLoading(true);
+  const message = {
+    method : `PUT`,
+    url : `https://om4psrsg18.execute-api.ap-south-1.amazonaws.com/Prod/user?email=${email}`,
+    data : {data:history}
+  };
+  await axios(message) 
+  setLoading(false);
+}
+
 const History =  () => {
 return(
   <HistorySection>
@@ -272,6 +302,8 @@ const Main = () => {
   )
 }
 
+
+
 const Heading = () => {
   return (
     <H1>
@@ -290,6 +322,27 @@ const Heading = () => {
       </AudioPlayerWrapper>
       <ControlSectionWrapper>
         <Heading/>
+        <MainForm>
+      <MainInput
+        onChange={event => setEmail(event.target.value)}
+        disabled={loading}
+        placeholder={'Enter Email'}
+      />
+      <FlexRow>
+        <MainSubmit 
+          onClick={() => getDetails(email)} 
+          disabled={loading || !email}
+          >
+          Get
+        </MainSubmit>
+        <MainSubmit 
+          onClick={() => sendDetails(email)} 
+          disabled={loading || !email}
+          >
+          Send
+        </MainSubmit>
+      </FlexRow>
+  </MainForm>
         <Main/>
       </ControlSectionWrapper>
       {history &&
