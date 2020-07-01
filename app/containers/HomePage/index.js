@@ -223,31 +223,46 @@ const generateAllLink = () => {
   }
 };
 
+const unspaceAndtolower = text => text.toLowerCase().replace(/\s/g, '')
+
 const getDetails = async () => {
   setLoading(true);
-  const message = {
-    method : `GET`,
-    url : `https://om4psrsg18.execute-api.ap-south-1.amazonaws.com/Prod/user?email=${email}`
-  };
-  const response = await axios(message)
-  if(typeof response.data === "object"){
-    if(response.data.length>0){
-      setHistory(response.data)
-      response.data.map((item)=>SaveToLocalStorage(item.title, item.link))
+  try {
+    const message = {
+      method : `GET`,
+      url : `https://om4psrsg18.execute-api.ap-south-1.amazonaws.com/Prod/user?email=${unspaceAndtolower(email)}`
+    };
+    const response = await axios(message)    
+    if(typeof response.data === "object"){
+      if(response.data.length>0){
+        setHistory(response.data)
+        response.data.map((item)=>SaveToLocalStorage(item.title, item.link))
+      }
     }
+  } catch (error) {
+    
+  } finally {
+    setLoading(false);
   }
-  setLoading(false);
+  
 }
 
 const sendDetails = async () => {
   setLoading(true);
-  const message = {
-    method : `PUT`,
-    url : `https://om4psrsg18.execute-api.ap-south-1.amazonaws.com/Prod/user?email=${email}`,
-    data : {data:history}
-  };
-  await axios(message) 
-  setLoading(false);
+  try {
+    const message = {
+      method : `PUT`,
+      url : `https://om4psrsg18.execute-api.ap-south-1.amazonaws.com/Prod/user?email=${unspaceAndtolower(email)}`,
+      data : {data:history}
+    };
+    await axios(message) 
+    
+  } catch (error) {
+    
+  } finally {
+    setLoading(false);
+  }
+    
 }
 
 const History =  () => {
@@ -322,22 +337,26 @@ const Heading = () => {
       </AudioPlayerWrapper>
       <ControlSectionWrapper>
         <Heading/>
-        <MainForm>
+        <MainForm onSubmit={e=>e.preventDefault()}>
       <MainInput
         onChange={event => setEmail(event.target.value)}
         disabled={loading}
         placeholder={'Enter Email'}
+        type='email'
+        required
       />
       <FlexRow>
         <MainSubmit 
           onClick={() => getDetails(email)} 
           disabled={loading || !email}
+          type='submit'
           >
           Get
         </MainSubmit>
         <MainSubmit 
           onClick={() => sendDetails(email)} 
           disabled={loading || !email}
+          type='submit'
           >
           Send
         </MainSubmit>

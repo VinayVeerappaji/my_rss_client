@@ -95,7 +95,7 @@ background-color: transparent;
 font-family: ${fontFamilyTwo};
 font-size: 1.5rem;
 `
-export const MainForm = styled.div`
+export const MainForm = styled.form`
 width: 90%;
 display: flex;
 flex-direction: column;
