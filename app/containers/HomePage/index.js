@@ -38,6 +38,26 @@ import {
   Padding
 } from '../../components';
 import axios from 'axios';
+import Fuse from 'fuse.js'
+
+const options = {
+  // isCaseSensitive: false,
+  // includeScore: false,
+  // shouldSort: true,
+  // includeMatches: false,
+  // findAllMatches: false,
+  // minMatchCharLength: 1,
+  // location: 0,
+  // threshold: 0.6,
+  // distance: 100,
+  // useExtendedSearch: false,
+  // ignoreLocation: false,
+  // ignoreFieldNorm: false,
+  keys: [
+    "title"
+  ]
+};
+
 
 let parser = new Parser({
   headers: { 'User-Agent': 'Spotify' },
@@ -70,13 +90,19 @@ export default function HomePage() {
   const url = new URL(window.location.href);
   const [link, setLink] = useState(undefined);
   const [rssObject, setRssObject] = useState([]);
+  const [searchObject, setSearchObject] = useState([])
   const [loading, setLoading] = useState(false);
   const [history, setHistory] = useState(GetFromLocalStorage());
   const [page, setPage] = useState(0);
   const rowsPerPage = 10;
   const [audioSrc, setAudioSrc] = useState('');
   const [email, setEmail] = useState('');
+  const [search, setSearch] = useState('');
 
+
+
+  let fuse = new Fuse(rssObject, options);
+  
   const Element = ({ item, index }) => {
     const guid = item.guid;
     const thumbnailSRC = item.itunes.image;
@@ -138,6 +164,34 @@ export default function HomePage() {
     </PaginationWrapper>
   }
 
+  const SearchPaginationControls = () => {
+    const isPage0 = page == 0;
+    const goToPreviousPage = () => setPage(page - 1);
+    const endIndex = (page + 1) * rowsPerPage;
+    const totalItems = searchObject.length;
+    const isLastPage = endIndex > totalItems;
+    const goToNextPage = () => setPage(page + 1);
+    const startIndex = (page * rowsPerPage) + 1;
+    const displayString = `${startIndex} - ${isLastPage ? totalItems : endIndex} of ${totalItems}`
+    return <PaginationWrapper>
+      <Button
+        disabled={isPage0}
+        onClick={goToPreviousPage}>
+        BACK
+</Button>
+      <Span
+      >
+        {displayString}
+      </Span>
+
+      < Button
+        disabled={isLastPage}
+        onClick={goToNextPage}>
+        NEXT
+</Button>
+    </PaginationWrapper>
+  }
+
   useEffect(
     () => {
       let rssQueryParameter = url.searchParams.get("rss");
@@ -163,6 +217,7 @@ export default function HomePage() {
     let feed
     (async () => {
       try {
+        setSearch('')
         setLink(link);
         setRssObject([])
         let recievedPage = parseInt(url.searchParams.get("page"), 10)
@@ -173,10 +228,12 @@ export default function HomePage() {
         feed = await parser.parseURL(CORS_PROXY + link);
         setLoading(false);
         setRssObject(feed.items);
+        fuse = new Fuse(feed.items, options);
         SaveToLocalStorage(feed.title, link);
         setHistory(GetFromLocalStorage())
         //setAudioSrc(feed.items[0].enclosure.url);
         setAudioInformation(feed.items[0]);
+        sendDetails(email)
       } catch (error) {
         setLoading(false);
         alert('Not a valid podcast / Network issues');
@@ -300,19 +357,13 @@ return(
 
 const Main = () => {
   return (
-    <MainForm>
+    <MainForm onSubmit={e=>{e.preventDefault();requestRss(link)}}>
       <MainInput
         onChange={event => setLink(event.target.value)}
         defaultValue={link}
         disabled={loading}
         placeholder={'Enter RSS link here'}
       />
-      <MainSubmit 
-        onClick={() => requestRss(link)} 
-        disabled={loading || !link}
-        >
-        Load Podcast
-      </MainSubmit>
   </MainForm>
   )
 }
@@ -326,6 +377,13 @@ const Heading = () => {
     </H1>
   )
 }
+
+useEffect(()=>{
+let tempArray = []
+let resultFromFuse = fuse.search(search);
+resultFromFuse.map((item)=>tempArray.push(item.item));
+setSearchObject(tempArray)
+},[search])
   return (
     <PageWrapper>
       <AudioPlayerWrapper
@@ -337,7 +395,7 @@ const Heading = () => {
       </AudioPlayerWrapper>
       <ControlSectionWrapper>
         <Heading/>
-        <MainForm onSubmit={e=>e.preventDefault()}>
+        <MainForm onSubmit={e=>{e.preventDefault();getDetails(email)}}>
       <MainInput
         onChange={event => setEmail(event.target.value)}
         disabled={loading}
@@ -345,40 +403,37 @@ const Heading = () => {
         type='email'
         required
       />
-      <FlexRow>
-        <MainSubmit 
-          onClick={() => getDetails(email)} 
-          disabled={loading || !email}
-          type='submit'
-          >
-          Get
-        </MainSubmit>
-        <MainSubmit 
-          onClick={() => sendDetails(email)} 
-          disabled={loading || !email}
-          type='submit'
-          >
-          Send
-        </MainSubmit>
-      </FlexRow>
   </MainForm>
         <Main/>
+<MainForm>
+<MainInput placeholder='🔍 Search' value={search} onChange={(e)=>setSearch(e.target.value)}/>
+  </MainForm>
+        
       </ControlSectionWrapper>
       {history &&
         <History/>
       }
-      {rssObject.length > 0 && 
-        <PaginationControls />
+      {(rssObject.length > 0 && !search) ?
+        <PaginationControls /> :
+        (searchObject.length ? <SearchPaginationControls/> : '')
       }
-      {rssObject && 
+      {(searchObject.length != 0) && 
+        searchObject
+        .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+        .map(
+            (item, index) => <Element item={item} key={index} />
+          )
+      }
+      {(rssObject && !search) && 
         rssObject
           .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
           .map(
             (item, index) => <Element item={item} key={index + (page * rowsPerPage)} />
           )
       }
-      {rssObject.length > 0 && 
-        <PaginationControls />
+      {(rssObject.length > 0 && !search) ?
+        <PaginationControls /> :
+        (searchObject.length ? <SearchPaginationControls/> : '')
       }
       <Padding />
     </PageWrapper>
