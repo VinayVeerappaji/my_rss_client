@@ -40,9 +40,8 @@ export const H2 = styled.h2`
 `
 
 export const Button = styled.button`
-border: ${lightBorder};
+border: none;
 font-family: ${fontFamilyTwo};
-font-weight: bold;
 margin-left: 5px;
 white-space: nowrap;
 background-color: transparent;
@@ -114,7 +113,7 @@ width: 100%;
 `
 export const HistorySection = styled.section`
 border: ${darkBorder};
-background-color: white;
+background-color: #1d1a28;
 width: 90%;
 margin: auto;
 padding: 1%;

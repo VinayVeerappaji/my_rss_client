@@ -5,7 +5,7 @@ const GlobalStyle = createGlobalStyle`
   body {
     height: 100%;
     width: 100%;
-    background-color: #ffd0d5;
+    background-color: #1d1a28;
   }
 
   body {
@@ -22,13 +22,15 @@ const GlobalStyle = createGlobalStyle`
   }
 
   h1, h2, h3, h4, h5, h6 {
-    font-family: 'Lobster', cursive;
+    font-family: 'Crete Round', serif;
     font-weight: initial;
+    color: #802bb1;
 }
   }
 
-  p, li, span {
-    font-family: 'Montserrat', sans-serif;
+  p, li, span, input, a, button {
+    font-family: 'ABeeZee', sans-serif;
+    color: #d1d7e0;
   }
 `;
 
