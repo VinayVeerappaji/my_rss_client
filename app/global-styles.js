@@ -5,7 +5,7 @@ const GlobalStyle = createGlobalStyle`
   body {
     height: 100%;
     width: 100%;
-    background-color: #1d1a28;
+    background-color: #030011;
   }
 
   body {

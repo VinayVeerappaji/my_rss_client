@@ -129,9 +129,13 @@ export default function HomePage() {
                 SHARE
           </Button>
             </FlexRow>
-            <P>{description}</P>
           </FlexColumn>
-        </FlexRow>
+          </FlexRow>
+          <FlexRow>
+            <FlexColumn>
+            <P>{description}</P>
+            </FlexColumn>
+          </FlexRow>
       </Article>
     )
   }
@@ -326,19 +330,22 @@ const History =  () => {
 return(
   <HistorySection>
     <ul>
+      <FlexRow>
       <H2>
         PodList
-        <IconButton
-          onClick={clearHistory}
-        >
-          ❌
-        </IconButton>
-        <IconButton
+        
+        {/* <IconButton
           onClick={generateAllLink}
         >
           SHARE
-        </IconButton>
+        </IconButton> */}
       </H2>
+      <Button
+          onClick={clearHistory}
+        >
+          CLEAR
+        </Button>
+      </FlexRow>
       {history.map( (item,index) =>
         <li
           key={index}
@@ -354,20 +361,6 @@ return(
     </ul>
   </HistorySection>)
 }
-
-const Main = () => {
-  return (
-    <MainForm onSubmit={e=>{e.preventDefault();requestRss(link)}}>
-      <MainInput
-        onChange={event => setLink(event.target.value)}
-        defaultValue={link}
-        disabled={loading}
-        placeholder={'Enter RSS link here'}
-      />
-  </MainForm>
-  )
-}
-
 
 
 const Heading = () => {
@@ -404,8 +397,15 @@ setSearchObject(tempArray)
         required
       />
   </MainForm>
-        <Main/>
-<MainForm>
+  <MainForm onSubmit={e=>{e.preventDefault();requestRss(link)}}>
+      <MainInput
+        onChange={event => setLink(event.target.value)}
+        defaultValue={link}
+        disabled={loading}
+        placeholder={'Enter RSS link here'}
+      />
+  </MainForm>
+<MainForm  onSubmit={e=>{e.preventDefault()}}>
 <MainInput placeholder='🔍 Search' value={search} onChange={(e)=>setSearch(e.target.value)}/>
   </MainForm>
         

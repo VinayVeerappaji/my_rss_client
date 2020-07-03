@@ -9,8 +9,9 @@ import styled from 'styled-components';
 import {lightBorder,darkBorder, randomBackgroundColor, fontFamilyTwo, fontFamilyOne} from './constants';
 
 export const Article = styled.article`
-  border: ${lightBorder};
+  border: ${darkBorder};
   margin: 1%;
+  padding : 1%;
   background-color: ${randomBackgroundColor};
   @media only screen and (max-width: 450px) {
     flex-wrap: wrap;
@@ -21,7 +22,7 @@ export const Article = styled.article`
 `
 
 export const Thumbnail = styled.img`
-  border: ${lightBorder};;
+  border: ${darkBorder};;
   margin: 1%;
   width: 100px;
   height: 100px;
@@ -30,6 +31,7 @@ export const Thumbnail = styled.img`
 export const FlexRow = styled.div`
   display: flex;
   flex-direction: row;
+  align-items: center;
 `
 
 export const FlexColumn = styled.div`
@@ -40,7 +42,7 @@ export const H2 = styled.h2`
 `
 
 export const Button = styled.button`
-border: none;
+border: ${lightBorder};
 font-family: ${fontFamilyTwo};
 margin-left: 5px;
 white-space: nowrap;
@@ -58,6 +60,7 @@ font-size: 0.75em;
 `
 
 export const P = styled.p`
+text-indent: 50px;
 `
 
 export const Span = styled.span`
@@ -113,7 +116,7 @@ width: 100%;
 `
 export const HistorySection = styled.section`
 border: ${darkBorder};
-background-color: #1d1a28;
+background-color: #030011;
 width: 90%;
 margin: auto;
 padding: 1%;
