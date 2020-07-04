@@ -1,5 +1,7 @@
 # RSS Client
 
+****** **[App is available here](https://rssclient.netlify.app)** ******
+
 This peoject started as a humble POC to test out various RSS to JSON libraries and now has evolved to a fully functioning RSS client with fuzzy search with back end support to store podcast history (Cloud Sync). The commits in this repository show how I have evolved from a beginner front-end dev. It initially had material UI as the front end components library, which I scrapped in favour to create a styling system of my own (and I intend to keep it that way). It is based on react-boilerplate, but as the boilerplate mentions, this project doesn't justify using such as powerful boilerplate, in short, This was a poor decision which has added uneeded complexity, I would be happy if anyone would want to collaborate with me to port this project to create-react-app (we will set up PWA, styled components from scratch).
 
 ## Tech Stack
