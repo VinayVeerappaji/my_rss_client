@@ -51,6 +51,7 @@ Then, open your favourite browser and open this [link](http://127.0.0.1:3000) fo
 ## Hey there!
 
 If you've made it to the end, it looks like you are interested in contributing, I have following ideas to be added and would love a (or few) hands to help.
+It's okay if you don't understand the project, we can have a discussion and help you to get started on this repo! (Provided you know some JS)
 
 - Dark mode.
 - Store RSS data locally instead of fetching everytime.
@@ -58,6 +59,7 @@ If you've made it to the end, it looks like you are interested in contributing, 
 - Better share experience.
 - Backend can have improvements (better CORS headers).
 - Commit & Contribution rules can be defined.
+- Documentation enchancements (Grammar, spelling included)
 
 ## Contributing guidlines
 
