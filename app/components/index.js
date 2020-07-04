@@ -60,7 +60,6 @@ font-size: 0.75em;
 `
 
 export const P = styled.p`
-text-indent: 50px;
 `
 
 export const Span = styled.span`

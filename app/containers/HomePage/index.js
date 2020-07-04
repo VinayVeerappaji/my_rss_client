@@ -134,7 +134,7 @@ export default function HomePage() {
           </FlexRow>
           <FlexRow>
             <FlexColumn>
-            <P dangerouslySetInnerHTML={{__html:description}}/>
+            <div style={{maxWidth: '650px',width: '90vw'}} dangerouslySetInnerHTML={{__html:description}}/>
             </FlexColumn>
           </FlexRow>
       </Article>

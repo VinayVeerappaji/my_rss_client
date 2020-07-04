@@ -71,14 +71,13 @@ const GlobalStyle = createGlobalStyle`
   h1, h2, h3, h4, h5, h6 {
     font-family: 'Crete Round', serif;
     font-weight: initial;
-    color: black;
 }
-  }
+
 
   p, li, span, input, a, button {
     font-family: 'ABeeZee', sans-serif;
-    color: black;
   }
+
 `;
 
 export default GlobalStyle;
