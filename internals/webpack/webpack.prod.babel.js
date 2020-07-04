@@ -119,8 +119,8 @@ module.exports = require('./webpack.base.babel')({
       name: 'Podcast Client',
       short_name: 'Podcast Client',
       description: 'A colorful Podcast Client',
-      background_color: '#030011',
-      theme_color: '#802bb1',
+      background_color: '#F9D8D4',
+      theme_color: '#000000',
       inject: true,
       ios: true,
       icons: [
