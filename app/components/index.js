@@ -10,7 +10,7 @@ import {lightBorder,darkBorder, randomBackgroundColor, fontFamilyTwo, fontFamily
 
 export const Article = styled.article`
   border: ${darkBorder};
-  margin: 1%;
+  margin: 2%;
   padding : 1%;
   background-color: ${randomBackgroundColor};
   @media only screen and (max-width: 450px) {
@@ -46,7 +46,7 @@ border: ${lightBorder};
 font-family: ${fontFamilyTwo};
 margin-left: 5px;
 white-space: nowrap;
-background-color: transparent;
+background-color: white;
 `
 
 export const IconButton = styled.button`
@@ -93,7 +93,7 @@ export const MainInput = styled.input`
 padding: 10px;
 border: ${darkBorder};
 border-radius: 0;
-background-color: transparent;
+background-color: white;
 font-family: ${fontFamilyTwo};
 font-size: 1.5rem;
 `
@@ -116,7 +116,7 @@ width: 100%;
 `
 export const HistorySection = styled.section`
 border: ${darkBorder};
-background-color: #030011;
+background-color: white;
 width: 90%;
 margin: auto;
 padding: 1%;

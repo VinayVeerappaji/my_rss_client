@@ -104,6 +104,7 @@ export default function HomePage() {
   let fuse = new Fuse(rssObject, options);
   
   const Element = ({ item, index }) => {
+    console.log(item)
     const guid = item.guid;
     const thumbnailSRC = item.itunes.image;
     const title = item.title;
@@ -111,7 +112,7 @@ export default function HomePage() {
     const audioLink = item.enclosure.url;
     const shareLink = `${url.host}?rss=${link}&page=${page ? page : 0}&id=${item.guid}`
     const shareAction = () => CopyToClipboard(shareLink);
-    const description = item.itunes.subtitle;
+    const description = item.content;
     return (
       <Article>
         <FlexRow>
@@ -133,7 +134,7 @@ export default function HomePage() {
           </FlexRow>
           <FlexRow>
             <FlexColumn>
-            <P>{description}</P>
+            <P dangerouslySetInnerHTML={{__html:description}}/>
             </FlexColumn>
           </FlexRow>
       </Article>
@@ -330,22 +331,6 @@ const History =  () => {
 return(
   <HistorySection>
     <ul>
-      <FlexRow>
-      <H2>
-        PodList
-        
-        {/* <IconButton
-          onClick={generateAllLink}
-        >
-          SHARE
-        </IconButton> */}
-      </H2>
-      <Button
-          onClick={clearHistory}
-        >
-          CLEAR
-        </Button>
-      </FlexRow>
       {history.map( (item,index) =>
         <li
           key={index}
@@ -358,6 +343,13 @@ return(
           </Link>
         </li>
         )}
+        <li style={{marginTop:'2%'}}>      
+          <Button
+          onClick={clearHistory}
+        >
+          CLEAR HISTORY
+        </Button>
+        </li>
     </ul>
   </HistorySection>)
 }
@@ -387,7 +379,6 @@ setSearchObject(tempArray)
           />
       </AudioPlayerWrapper>
       <ControlSectionWrapper>
-        <Heading/>
         <MainForm onSubmit={e=>{e.preventDefault();getDetails(email)}}>
       <MainInput
         onChange={event => setEmail(event.target.value)}

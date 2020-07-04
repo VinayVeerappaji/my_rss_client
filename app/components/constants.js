@@ -1,11 +1,11 @@
-export const lightBorder = `1px solid #564f6f`;
-export const darkBorder = `2.5px solid #564f6f`;
+export const lightBorder = `1px solid black`;
+export const darkBorder = `2.5px solid black`;
 export const fontFamilyOne = `'Crete Round', serif`;
 export const fontFamilyTwo = `'ABeeZee', sans-serif`;
 
 export const randomBackgroundColor = () => {
 
-    return '#030011';
+    return 'white';
 
     switch (Math.floor((Math.random() * 10) + 1)) {
       case 1: return '#a4c9d8';
