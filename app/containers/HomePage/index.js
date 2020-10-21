@@ -41,18 +41,6 @@ import axios from 'axios';
 import Fuse from 'fuse.js'
 
 const options = {
-  // isCaseSensitive: false,
-  // includeScore: false,
-  // shouldSort: true,
-  // includeMatches: false,
-  // findAllMatches: false,
-  // minMatchCharLength: 1,
-  // location: 0,
-  // threshold: 0.6,
-  // distance: 100,
-  // useExtendedSearch: false,
-  // ignoreLocation: false,
-  // ignoreFieldNorm: false,
   keys: [
     "title"
   ]
@@ -104,7 +92,6 @@ export default function HomePage() {
   let fuse = new Fuse(rssObject, options);
   
   const Element = ({ item, index }) => {
-    console.log(item)
     const guid = item.guid;
     const thumbnailSRC = item.itunes.image;
     const title = item.title;
@@ -236,7 +223,6 @@ export default function HomePage() {
         fuse = new Fuse(feed.items, options);
         SaveToLocalStorage(feed.title, link);
         setHistory(GetFromLocalStorage())
-        //setAudioSrc(feed.items[0].enclosure.url);
         setAudioInformation(feed.items[0]);
         sendDetails(email)
       } catch (error) {
