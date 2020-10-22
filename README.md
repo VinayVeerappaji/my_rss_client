@@ -2,13 +2,13 @@
 
 ****** **[App is available here](https://rssclient.netlify.app)** ******
 
-This peoject started as a humble POC to test out various RSS to JSON libraries and now has evolved to a fully functioning RSS client with fuzzy search with back end support to store podcast history (Cloud Sync). The commits in this repository show how I have evolved from a beginner front-end dev. It initially had material UI as the front end components library, which I scrapped in favour to create a styling system of my own (and I intend to keep it that way). It is based on react-boilerplate, but as the boilerplate mentions, this project doesn't justify using such as powerful boilerplate, in short, This was a poor decision which has added uneeded complexity, I would be happy if anyone would want to collaborate with me to port this project to create-react-app (we will set up PWA, styled components from scratch).
+This project started as a humble POC to test out various RSS to JSON libraries and now has evolved to a fully functioning RSS client with fuzzy search with back end support to store podcast history (Cloud Sync). The commits in this repository show how I have evolved from a beginner front-end dev to better front-end dev. It initially had material UI as the front end components library, which I scrapped in favour to create a styling system of my own (and I intend to keep it that way). It is based on react-boilerplate, but as the boilerplate mentions, this project doesn't justify using such as powerful boilerplate, in short, this was a poor decision which has added unneeded complexity, I would be happy if anyone would like to collaborate with me to port this project to create-react-app (we will set up PWA, styled components from scratch).
 
 ## Tech Stack
 
 At present, the following libraries are used :
 
-- React
+- [React](https://reactjs.org/docs/getting-started.html)
 - [react-boilerplate related libraries](https://github.com/react-boilerplate/react-boilerplate/blob/master/docs/general/introduction.md#tech-stack)
 - [axios](https://github.com/axios/axios)
 - [fuse.js](https://fusejs.io/)
@@ -23,8 +23,8 @@ The back-end is [here](https://github.com/98lenvi/rss_client_backend) and is a N
 - Sync history to cloud (using email, there is no authentication as of now).
 - PWA support (Title changes according to file being played).
 - Completely responsive.
-- Share by episode
-- Simple to use, light, fast & no mandatory login 😇 
+- Share by episode.
+- Simple to use, light, fast & no mandatory login 😇 .
 
 ## Demo
 [click here](https://rssclient.netlify.app)
@@ -48,7 +48,8 @@ Open the terminal in the root of the project, and type the following :
  `yarn start`
  
 
-Then, open your favourite browser and open this [link](http://127.0.0.1:3000) for the app .
+Then, open your favourite browser and open this [link](http://127.0.0.1:3000)  for the app .
+You can type either http://localhost:3000/ or http://127.0.0.1:300 in the browser window.
 
 ## Hey there!
 
